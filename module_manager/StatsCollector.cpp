@@ -32,7 +32,8 @@ void StatsCollector::printStats()
 void StatsCollector::writeStatsToFile(const std::string &filename)
 {
     std::unique_lock<std::mutex> lock(mStatsMutex);
-    std::ofstream outFile(filename);
+    
+    std::ofstream outFile(filename, std::ios::app);
 
     if (!outFile.is_open())
     {

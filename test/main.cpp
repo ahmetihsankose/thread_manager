@@ -23,8 +23,8 @@ int main()
     while (true)
     {
         threadManager.printAllThreadStats();
-        threadManager.writeAllThreadStatsToFile("/home/kose/workspace/modul-based-thread-manager/test.txt");
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        threadManager.writeAllThreadStatsToFile("/home/kose/workspace/modular-threads-manager/test.txt");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         // threadManager.printAllThreadStats();
     }
 }

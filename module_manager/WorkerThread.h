@@ -17,10 +17,7 @@ public:
                           bool recordStats = false)
         : mObj(obj), mWork(work), mRecordStats(recordStats) {}
 
-    void setRecordStats(bool recordStats) override
-    {
-        mRecordStats.store(recordStats);
-    }
+    void setRecordStats(bool recordStats) override { mRecordStats.store(recordStats); }
 
 
 protected:
