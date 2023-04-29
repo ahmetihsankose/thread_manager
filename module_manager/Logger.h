@@ -19,6 +19,7 @@ class Logger;
 
 enum class LogLevel
 {
+    NONE,
     DEBUG,
     INFO,
     WARNING,
@@ -121,6 +122,24 @@ private:
     std::ofstream logFile;
 };
 
+// Add this helper function to format the message string with the provided arguments
+template <typename... Args>
+std::string format_string(const std::string &message, Args &&...args)
+{
+    if constexpr (sizeof...(Args) == 0)
+    {
+        return message;
+    }
+    else
+    {
+        int size = snprintf(nullptr, 0, message.c_str(), args...) + 1;
+        std::unique_ptr<char[]> buf(new char[size]);
+        snprintf(buf.get(), size, message.c_str(), args...);
+        return std::string(buf.get(), buf.get() + size - 1);
+    }
+}
+
+
 class Logger
 {
 public:
@@ -155,11 +174,7 @@ public:
             return;
         }
 
-        std::stringstream ss;
-        int dummy[] = {0, ((void)(ss << std::forward<Args>(args)), 0)...};
-        (void)dummy;
-        std::string formattedMessage = ss.str();
-        formattedMessage = message + formattedMessage;
+        std::string formattedMessage = format_string(message, std::forward<Args>(args)...);
 
         std::string levelStr;
         switch (level)
@@ -211,7 +226,7 @@ private:
 
     std::vector<std::unique_ptr<LogOutput>> outputs;
     std::unique_ptr<LogFormatter> formatter;
-    LogLevel minLogLevel = LogLevel::DEBUG;
+    LogLevel minLogLevel = LogLevel::NONE;
     std::mutex logMutex;
 
     Logger(const Logger &) = delete;

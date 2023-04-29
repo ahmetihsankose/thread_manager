@@ -22,7 +22,7 @@ void ThreadBase::start()
     }
     else
     {
-        LOG_INFO("Thread successfully started");
+        LOG_INFO("Thread %d successfully started", mThreadID);
     }
 }
 
