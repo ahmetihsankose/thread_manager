@@ -55,7 +55,7 @@ public:
     virtual ~LogOutput() = default;
 
     virtual void write(const std::string &message) = 0;
-    virtual void write(const std::string &message, LogLevel level) = 0; // Ekle
+    virtual void write(const std::string &message, LogLevel level) = 0;
 };
 
 class ConsoleOutput : public LogOutput

@@ -42,6 +42,9 @@ int main()
                                              { std::static_pointer_cast<TestModule>(obj)->tick(); });
 
     threadManager.startAllThreads();
+    threadManager.setRecordStats(0, true);
+    threadManager.writeAllThreadStatsToFile("test.txt");
+
 
     while (true)
     {
