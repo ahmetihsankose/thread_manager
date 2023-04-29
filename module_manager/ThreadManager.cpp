@@ -137,7 +137,7 @@ void ThreadManager::printAllThreadStats()
 
     for (const auto &thread : mThreads)
     {
-        thread->getStatsCollector().printStats();
+        thread->getStatsCollector().setEnablePrinting(true);
     }
 }
 
@@ -147,6 +147,6 @@ void ThreadManager::writeAllThreadStatsToFile(const std::string &filename)
 
     for (const auto &thread : mThreads)
     {
-        thread->getStatsCollector().writeStatsToFile(filename);
+        thread->getStatsCollector().setEnableWritingToFile(true, filename);
     }
 }

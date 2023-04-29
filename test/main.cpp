@@ -19,11 +19,11 @@ int main()
 
     threadManager.startAllThreads();
     threadManager.setRecordStats(0, true);
+    threadManager.printAllThreadStats();
+    threadManager.writeAllThreadStatsToFile("/home/kose/workspace/modular-threads-manager/test.txt");
 
     while (true)
     {
-        threadManager.printAllThreadStats();
-        threadManager.writeAllThreadStatsToFile("/home/kose/workspace/modular-threads-manager/test.txt");
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         // threadManager.printAllThreadStats();
     }
