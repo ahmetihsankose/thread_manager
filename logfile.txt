@@ -1,6 +1,0 @@
-[2023-04-29 21:21:44][INFO] Thread successfully started
-[2023-04-29 21:21:44][ERROR] Could not set thread priority. Check limits.conf or execute as root
-[2023-04-29 21:21:44][ERROR] Could not set thread priority. Check limits.conf or execute as root
-[2023-04-29 21:21:44][INFO] Thread successfully started
-[2023-04-29 21:21:44][INFO] Thread successfully started
-[2023-04-29 21:21:44][ERROR] Could not set thread priority. Check limits.conf or execute as root
