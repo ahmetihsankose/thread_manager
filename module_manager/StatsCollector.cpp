@@ -17,7 +17,6 @@ void StatsCollector::recordStats(int id, uint64_t value)
     writeStatsToFile(mFilename);
     if (ringBuffer.size() == RING_BUFFER_SIZE - 1)
     {
-        std::cout << "Ring buffer is full, clearing it..." << std::endl;
         ringBuffer.clear();
     }
 }
