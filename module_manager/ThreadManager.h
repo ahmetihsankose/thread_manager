@@ -41,7 +41,7 @@ public:
 
     void setRecordStats(int threadID, bool recordStats);
 
-    void printAllThreadStats();
+    void printAllThreadStats(bool printToConsole = true);
     void writeAllThreadStatsToFile(const std::string &filename);
 
 private:

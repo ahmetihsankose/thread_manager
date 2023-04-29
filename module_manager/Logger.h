@@ -1,3 +1,8 @@
+/*
+    Written by Ahmet Ihsan KOSE, Istanbul, Turkey
+    Contact koseahmetihsan@gmail.com
+*/
+
 #pragma once
 #include <iostream>
 #include <fstream>
@@ -218,3 +223,5 @@ private:
 #define LOG_INFO(...) LOG(LogLevel::INFO, __VA_ARGS__)
 #define LOG_WARNING(...) LOG(LogLevel::WARNING, __VA_ARGS__)
 #define LOG_ERROR(...) LOG(LogLevel::ERROR, __VA_ARGS__)
+
+#define LOG_FILE(filename) Logger::getInstance().addOutput(std::make_unique<FileOutput>(filename))

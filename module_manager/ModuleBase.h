@@ -1,3 +1,8 @@
+/*
+    Written by Ahmet Ihsan KOSE, Istanbul, Turkey
+    Contact koseahmetihsan@gmail.com
+*/
+
 #pragma once
 
 class ModuleBase

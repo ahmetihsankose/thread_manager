@@ -1,3 +1,8 @@
+/*
+    Written by Ahmet Ihsan KOSE, Istanbul, Turkey
+    Contact koseahmetihsan@gmail.com
+*/
+
 #include "StatsCollector.h"
 
 void StatsCollector::recordStats(int id, uint64_t value)

@@ -131,13 +131,13 @@ void ThreadManager::setRecordStats(int threadID, bool recordStats)
     }
 }
 
-void ThreadManager::printAllThreadStats()
+void ThreadManager::printAllThreadStats(bool printToConsole)
 {
     std::unique_lock<std::mutex> lock(mMutex);
 
     for (const auto &thread : mThreads)
     {
-        thread->getStatsCollector().setEnablePrinting(true);
+        thread->getStatsCollector().setEnablePrinting(printToConsole);
     }
 }
 
