@@ -11,6 +11,7 @@ void RealTimeThread::setPeriod(unsigned int periodNs)
 {
     if (periodNs <= 0)
     {
+        LOG_ERROR("Invalid period value (must be greater than 0)");
         throw std::runtime_error("Invalid period value (must be greater than 0)");
     }
 
@@ -49,7 +50,7 @@ bool RealTimeThread::setThreadPriority(int priority)
     int errorFlag = pthread_setschedparam(thread, SCHED_FIFO, &param);
     if (errorFlag != 0)
     {
-        std::cout << "Could not set thread priority. Check limits.conf or execute as root" << std::endl;
+        LOG_ERROR("Could not set thread priority. Check limits.conf or execute as root");
         success = false;
     }
 
@@ -69,14 +70,14 @@ bool RealTimeThread::setThreadAffinity(int cpuCore)
     {
         if (cpuCore >= numberOfCPUs)
         {
-            std::cout << "Tried to attach thread to core: " << cpuCore << " even though we only have: " << numberOfCPUs << " core!" << std::endl;
+            LOG_ERROR("Tried to attach thread to core: %d even though we only have: %d core!", cpuCore, numberOfCPUs);
             return false;
         }
         CPU_SET(cpuCore, &cpuset);
         int errorFlag = pthread_setaffinity_np(thread, sizeof(cpuset), &cpuset);
         if (errorFlag != 0)
         {
-            std::cout << "Could not assign thread " << getThreadID() << " to single cpu core: " << errorFlag << std::endl;
+            LOG_ERROR("Could not assign thread %d to single cpu core: %d", getThreadID(), errorFlag);
             success = false;
         }
     }

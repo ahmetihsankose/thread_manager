@@ -6,7 +6,7 @@
 #include <fstream>
 #include "RingBuffer.h"
 
-constexpr size_t RING_BUFFER_SIZE = 5;
+constexpr size_t RING_BUFFER_SIZE = 1024;
 
 class StatsCollector
 {

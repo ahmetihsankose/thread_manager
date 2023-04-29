@@ -9,6 +9,7 @@
 #include <iostream>
 #include <unistd.h>
 #include "StatsCollector.h"
+#include "Logger.h"
 
 class ThreadBase
 {

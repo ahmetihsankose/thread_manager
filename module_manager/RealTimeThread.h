@@ -7,6 +7,7 @@
 #include "ThreadBase.h"
 #include <pthread.h>
 #include <time.h>
+#include "Logger.h"
 
 class RealTimeThread : public ThreadBase
 {
