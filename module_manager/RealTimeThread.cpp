@@ -11,7 +11,7 @@ void RealTimeThread::setPeriod(unsigned int periodNs)
 {
     if (periodNs <= 0)
     {
-        LOG_ERROR("Invalid period value (must be greater than 0)");
+        LOG_ERROR("Invalid period value for thread %d", getThreadID());
         throw std::runtime_error("Invalid period value (must be greater than 0)");
     }
 
@@ -50,7 +50,7 @@ bool RealTimeThread::setThreadPriority(int priority)
     int errorFlag = pthread_setschedparam(thread, SCHED_FIFO, &param);
     if (errorFlag != 0)
     {
-        LOG_ERROR("Could not set thread priority. Check limits.conf or execute as root");
+        LOG_ERROR("Could not set thread %d priority. Check limits.conf or execute as root!", getThreadID());
         success = false;
     }
 
