@@ -5,8 +5,8 @@
 #include "ThreadManager.h"
 #include "WorkerThread.h"
 #include "TestModule.h"
-#include "Logger.h"
-#include "Exception.h"
+#include "../utilities/Logger.h"
+#include "../utilities/Exception.h"
 #include <semaphore.h>
 
 sem_t sem1, sem2, sem3, sem4;

@@ -9,7 +9,7 @@
 #include <mutex>
 #include <iostream>
 #include <fstream>
-#include "RingBuffer.h"
+#include "../utilities/RingBuffer.h"
 
 constexpr size_t RING_BUFFER_SIZE = 1024;
 

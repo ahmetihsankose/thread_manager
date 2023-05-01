@@ -9,7 +9,7 @@
 #include <iostream>
 #include <unistd.h>
 #include "StatsCollector.h"
-#include "Logger.h"
+#include "../utilities/Logger.h"
 #include <memory>
 
 class ThreadBase
