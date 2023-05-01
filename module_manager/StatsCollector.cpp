@@ -8,17 +8,13 @@
 void StatsCollector::recordStats(int id, uint64_t value)
 {
     std::unique_lock<std::mutex> lock(mStatsMutex);
-    auto &ringBuffer = mStats[id];
-    ringBuffer.push_back(value);
+
+    mStats[id].push_back(value);
 
     mTotalTaskCount[id]++; // Increase the total task count for the given ID
 
     printStats();
-    writeStatsToFile(mFilename);
-    if (ringBuffer.size() == RING_BUFFER_SIZE - 1)
-    {
-        ringBuffer.clear();
-    }
+    writeStatsToFile(mFileName);
 }
 
 void StatsCollector::printStats()
@@ -56,12 +52,6 @@ void StatsCollector::writeStatsToFile(const std::string &filename)
     }
 
     std::ios_base::openmode mode = std::ios::app;
-
-    if (mFileReset)
-    {
-        mode = std::ios::trunc;
-        mFileReset = false;
-    }
 
     std::ofstream outFile(filename, mode);
 
@@ -101,6 +91,17 @@ void StatsCollector::setEnablePrinting(bool enable)
 void StatsCollector::setEnableWritingToFile(bool enable, const std::string &filename)
 {
     std::unique_lock<std::mutex> lock(mStatsMutex);
-    mFilename = filename;
+    mFileName = filename;
+    resetFile(mFileName);
     enableWritingToFile = enable;
+}
+
+void StatsCollector::resetFile(const std::string &filename)
+{
+    std::ofstream outFile(filename, std::ios::trunc);
+    if (!outFile.is_open())
+    {
+        throw std::runtime_error("Could not open file: " + filename);
+    }
+    outFile.close();
 }

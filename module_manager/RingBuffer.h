@@ -40,6 +40,17 @@ public:
         }
     }
 
+    // Access the first element in the buffer
+    T front() const
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        if (size() == 0)
+        {
+            throw std::out_of_range("Buffer is empty");
+        }
+        return buffer[start];
+    }
+
     // Access an element in the buffer by index
     T operator[](size_t index) const
     {
