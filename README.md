@@ -65,4 +65,5 @@ To use Threads Manager in your project, follow these steps to clone the reposito
 git clone <repo_url>
 git submodule init
 git submodule update
+```
 </pre>
