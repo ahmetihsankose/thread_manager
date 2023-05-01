@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include "StatsCollector.h"
 #include "Logger.h"
+#include <memory>
 
 class ThreadBase
 {
@@ -44,12 +45,12 @@ public:
     virtual void setPeriod(unsigned int periodMs) {}
     virtual void setRecordStats(bool recordStats) { return; }
 
-    StatsCollector &getStatsCollector() { return statsCollector; }
+    std::unique_ptr<StatsCollector> &getStatsCollector() { return statsCollector; }
 
 
 protected:
     virtual void run() = 0;
-    StatsCollector statsCollector;
+    std::unique_ptr<StatsCollector> statsCollector = nullptr;
 
     int mThreadID = 0;
     int mThreadPriority = 0;

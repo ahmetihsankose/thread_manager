@@ -17,8 +17,11 @@ public:
                           bool recordStats = false)
         : mObj(obj), mWork(work), mRecordStats(recordStats) {}
 
-    void setRecordStats(bool recordStats) override { mRecordStats.store(recordStats); }
-
+    void setRecordStats(bool recordStats) override
+    {
+        mRecordStats.store(recordStats);
+        statsCollector = recordStats ? std::make_unique<StatsCollector>() : move(statsCollector);
+    }
 
 protected:
     void run() override
@@ -35,7 +38,7 @@ protected:
             uint64_t executionTimeNs = endTimeNs - startTimeNs;
             if (mRecordStats.load())
             {
-                statsCollector.recordStats(mThreadID, executionTimeNs);
+                statsCollector->recordStats(mThreadID, executionTimeNs);
             }
             waitForNextPeriod();
         }
