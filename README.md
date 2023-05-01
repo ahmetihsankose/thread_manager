@@ -1,13 +1,13 @@
-# Modular Threads Manager
+# Threads Manager
 
-Modular Threads Manager is a C++ application designed to manage threads and modules in multi-threaded programs using POSIX threads. This project allows you to easily create, manage, and update threads while maintaining modularity.
+Threads Manager is a C++ application designed to manage threads in multi-threaded programs using POSIX threads. This project allows you to easily create, manage, and update threads while maintaining modularity.
 
 ## Features
 
 * Easy thread creation and management
 * Thread priority, affinity, and period update support
 * Real-time thread support
-* Modular design to facilitate the addition or removal of modules
+* Modular design to facilitate the addition or removal of threads
 * Statistics collection and reporting for each thread
 * Thread-safe implementation
 
@@ -59,6 +59,10 @@ int main()
 
 ## Installation and Dependencies
 
-To use Modular Threads Manager in your project, clone the repository and include the necessary header and source files in your project. The project is designed to work with POSIX threads and should work with any C++ compiler that supports POSIX threads.
+To use Threads Manager in your project, follow these steps to clone the repository, initialize the Git submodules, and include the necessary header and source files in your project. The project is designed to work with POSIX threads and should work with any C++ compiler that supports POSIX threads.
 
+```bash
+git clone <repo_url>
+git submodule init
+git submodule update
 </pre>
