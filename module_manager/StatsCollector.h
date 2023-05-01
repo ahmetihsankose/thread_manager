@@ -2,7 +2,7 @@
     Written by Ahmet Ihsan KOSE, Istanbul, Turkey
     Contact koseahmetihsan@gmail.com
 */
-
+#pragma once
 #include <map>
 #include <unordered_map>
 #include <vector>
@@ -20,6 +20,8 @@ public:
     void setEnablePrinting(bool enable);
     void setEnableWritingToFile(bool enable, const std::string &filename);
     void resetFile(const std::string &filename);
+
+    const auto &getStats() const { return mStats; }
 
 private:
     std::map<int, RingBuffer<uint64_t, RING_BUFFER_SIZE>> mStats = {};
