@@ -1,4 +1,4 @@
 build/
-logfile.txt
-test.txt
+logfile.log
+thread_test.log
 .vscode/
