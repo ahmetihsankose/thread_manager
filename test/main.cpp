@@ -20,7 +20,7 @@ int main()
 {
     try
     {
-        LOG_FILE("/home/kose/workspace/modular-threads-manager/logfile.txt");
+        LOG_FILE("/home/kose/workspace/my_projects/thread_manager/logfile.log");
 
         sem_init(&sem1, 0, 0);
         sem_init(&sem2, 0, 0);
@@ -40,7 +40,7 @@ int main()
         threadManager.setRecordStats(0, true);
         threadManager.setRecordStats(1, true);
         threadManager.setRecordStats(2, true);
-        threadManager.writeAllThreadStatsToFile("/home/kose/workspace/modular-threads-manager/test.txt");
+        threadManager.writeAllThreadStatsToFile("/home/kose/workspace/my_projects/thread_manager/thread_test.log");
 
         threadManager.startAllThreads();
 

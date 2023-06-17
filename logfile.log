@@ -1,0 +1,6 @@
+[2023-06-17 16:29:01][INFO] Thread 0 successfully started
+[2023-06-17 16:29:01][INFO] Thread 1 successfully started
+[2023-06-17 16:29:01][INFO] Thread 2 successfully started
+[2023-06-17 16:29:01][ERROR] Could not set thread 1 priority. Check limits.conf or execute as root!
+[2023-06-17 16:29:01][ERROR] Could not set thread 0 priority. Check limits.conf or execute as root!
+[2023-06-17 16:29:01][ERROR] Could not set thread 2 priority. Check limits.conf or execute as root!
