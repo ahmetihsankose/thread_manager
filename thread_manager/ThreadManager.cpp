@@ -36,6 +36,19 @@ bool ThreadManager::areAllThreadsRunning()
     return true;
 }
 
+bool ThreadManager::areAllThreadsStopped()
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+    for (const auto &thread : mThreads)
+    {
+        if (thread->isRunning())
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 void ThreadManager::destroyThread(int threadID)
 {
     std::unique_lock<std::mutex> lock(mMutex);
@@ -45,6 +58,8 @@ void ThreadManager::destroyThread(int threadID)
                                       return thread->getThreadID() == threadID;
                                   }),
                    mThreads.end());
+
+    LOG_INFO("Thread %d successfully destroyed", threadID);
 }
 
 void ThreadManager::startThread(int threadID)

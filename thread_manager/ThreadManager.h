@@ -16,12 +16,24 @@ public:
     ThreadManager() = default;
 
     template <typename T, typename... Args>
-    void createThread(size_t threadIndex, int priority, uint64_t periodNs, int cpuCore = -1, Args &&...args)
+    void createThread(size_t threadIndex, std::string name, int priority, uint64_t periodNs, int cpuCore = -1, Args &&...args)
     {
         std::unique_lock<std::mutex> lock(mMutex);
 
+        auto  it = std::find_if(mThreads.begin(), mThreads.end(),
+                                [threadIndex](const std::unique_ptr<ThreadBase> &thread)
+                                {
+                                    return thread->getThreadID() == threadIndex;
+                                });
+        if (it != mThreads.end())
+        {
+            LOG_ERROR("Thread %d already exists", threadIndex);
+            return;
+        }
+        
         auto thread = std::make_unique<T>(std::forward<Args>(args)...);
         thread->setThreadID(threadIndex);
+        thread->setThreadName(name);
         thread->setPeriod(periodNs);
         thread->setPriority(priority);
         thread->setCpuCore(cpuCore);
@@ -31,6 +43,7 @@ public:
     void startAllThreads();
     void stopAllThreads();
     bool areAllThreadsRunning();
+    bool areAllThreadsStopped();
 
     void destroyThread(int threadID);
     void startThread(int threadID);
@@ -43,6 +56,8 @@ public:
 
     void printAllThreadStats(bool printToConsole = true);
     void writeAllThreadStatsToFile(const std::string &filename);
+
+    const std::vector<std::unique_ptr<ThreadBase>> &getThreads() const { return mThreads; }
 
 private:
     std::vector<std::unique_ptr<ThreadBase>> mThreads;

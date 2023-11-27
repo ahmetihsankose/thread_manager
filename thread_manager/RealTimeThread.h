@@ -15,11 +15,12 @@ public:
     RealTimeThread() = default;
     ~RealTimeThread() = default;
 
-    void setPeriod(unsigned int periodMs) override;
+    void setPeriod(unsigned int periodNs) override;
 
     bool setThreadPriority(int priority) override;
     bool setThreadAffinity(int cpuCore) override;
     
+    const int getThreadCycleTimeNs() const override { return mPeriodNs; }
 protected:
     void waitForNextPeriod();
     

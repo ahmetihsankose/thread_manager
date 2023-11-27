@@ -15,7 +15,7 @@
 class ThreadBase
 {
 public:
-    ThreadBase() : mThread(), mThreadStarted(false), mThreadID(0), mThreadPriority(0), mThreadCPUCore(-1) {}
+    ThreadBase() : mThread(), mThreadStarted(false), mThreadID(0), mThreadName(""), mThreadPriority(0), mThreadCPUCore(-1) {}
 
     virtual ~ThreadBase()
     {
@@ -33,29 +33,40 @@ public:
 
     bool isRunning() const { return mThreadStarted; }
     void setThreadID(int id) { mThreadID = id; }
-    int getThreadCpuCore() const { return mThreadCPUCore; }
-    int getThreadPriority() const { return mThreadPriority; }
-    int getThreadID() const { return mThreadID; }
-
+    void setThreadName(const std::string &name) { mThreadName = name; }
     void setPriority(int priority) { mThreadPriority = priority; }
     void setCpuCore(int cpuCore) { mThreadCPUCore = cpuCore; }
 
+    const int getThreadCpuCore() const { return mThreadCPUCore; }
+    const int getThreadPriority() const { return mThreadPriority; }
+    const int getThreadID() const { return mThreadID; }
+    const std::string getThreadName() const { return mThreadName; }
+
     virtual bool setThreadPriority(int priority) { return true; }
     virtual bool setThreadAffinity(int cpuCore) { return true; }
-    virtual void setPeriod(unsigned int periodMs) {}
+    virtual void setPeriod(unsigned int periodNs) {}
     virtual void setRecordStats(bool recordStats) { return; }
 
-    std::unique_ptr<StatsCollector> &getStatsCollector() { return statsCollector; }
+    virtual const bool isRecordingStats() const { return false; }
 
+    virtual const int getThreadCycleTimeNs() const { return 0; }
+
+    std::unique_ptr<StatsCollector> &getStatsCollector() { return statsCollector; }
 
 protected:
     virtual void run() = 0;
     std::unique_ptr<StatsCollector> statsCollector = nullptr;
 
+    pthread_t mThread;
+
+private:
+    bool mThreadStarted = false;
+
+protected:
     int mThreadID = 0;
+    std::string mThreadName = "";
     int mThreadPriority = 0;
     int mThreadCPUCore = -1;
-    pthread_t mThread;
 
 private:
     static void *threadEntryPoint(void *arg)
@@ -64,6 +75,4 @@ private:
         self->run();
         return nullptr;
     }
-
-    bool mThreadStarted = false;
 };

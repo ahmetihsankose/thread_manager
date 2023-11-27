@@ -27,13 +27,13 @@ int main()
         sem_init(&sem3, 0, 0);
         sem_init(&sem4, 0, 0);
 
-        threadManager.createThread<WorkerThread>(0, 45, 1e9, 0, testModule1, [](std::shared_ptr<void> obj)
+        threadManager.createThread<WorkerThread>(0, "test1", 45, 1e9, 0, testModule1, [](std::shared_ptr<void> obj)
                                                  { std::static_pointer_cast<TestModule1>(obj)->tick(); });
 
-        threadManager.createThread<WorkerThread>(1, 45, 1e9, 0, testModule2, [](std::shared_ptr<void> obj)
+        threadManager.createThread<WorkerThread>(1, "test2", 45, 1e9, 0, testModule2, [](std::shared_ptr<void> obj)
                                                  { std::static_pointer_cast<TestModule2>(obj)->tick(); });
 
-        threadManager.createThread<WorkerThread>(2, 45, 1e9, 0, testModule3, [](std::shared_ptr<void> obj)
+        threadManager.createThread<WorkerThread>(2, "test3", 45, 1e9, 0, testModule3, [](std::shared_ptr<void> obj)
                                                  { std::static_pointer_cast<TestModule3>(obj)->tick(); });
 
 

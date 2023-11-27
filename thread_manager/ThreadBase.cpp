@@ -10,7 +10,8 @@ void ThreadBase::start()
     if (mThreadStarted)
     {
         LOG_ERROR("Thread %d is already started", mThreadID);
-        throw std::runtime_error("Thread is already started");
+        // throw std::runtime_error("Thread is already started");
+        return;
     }
 
     mThreadStarted = true;
@@ -31,7 +32,8 @@ void ThreadBase::stop()
     if (!mThreadStarted)
     {
         LOG_ERROR("Thread %d is not started", mThreadID);
-        throw std::runtime_error("Thread is not started");
+        // throw std::runtime_error("Thread is not started");
+        return;
     }
     pthread_cancel(mThread);
     pthread_join(mThread, nullptr);

@@ -15,6 +15,8 @@ void RealTimeThread::setPeriod(unsigned int periodNs)
         throw std::runtime_error("Invalid period value (must be greater than 0)");
     }
 
+    LOG_INFO("Thread %d period set to %d ns", getThreadID(), periodNs);
+
     mPeriodNs = periodNs;
 }
 
@@ -54,6 +56,8 @@ bool RealTimeThread::setThreadPriority(int priority)
         success = false;
     }
 
+    LOG_INFO("Thread %d priority set to %d", getThreadID(), priority);
+
     return success;
 }
 
@@ -81,6 +85,8 @@ bool RealTimeThread::setThreadAffinity(int cpuCore)
             success = false;
         }
     }
+
+    LOG_INFO("Thread %d assigned to cpu core: %d", getThreadID(), cpuCore);
 
     return success;
 }

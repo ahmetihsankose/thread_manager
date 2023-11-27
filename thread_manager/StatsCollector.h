@@ -23,6 +23,8 @@ public:
 
     const auto &getStats() const { return mStats; }
 
+    const uint64_t getCurrentExecutionTime(int id) const;
+
 private:
     std::map<int, RingBuffer<uint64_t, RING_BUFFER_SIZE>> mStats = {};
     std::unordered_map<int, size_t> mTotalTaskCount = {};

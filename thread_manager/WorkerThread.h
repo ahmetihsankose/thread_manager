@@ -23,6 +23,8 @@ public:
         statsCollector = recordStats ? std::make_unique<StatsCollector>() : move(statsCollector);
     }
 
+    const bool isRecordingStats() const override { return mRecordStats.load(); }
+
 protected:
     void run() override
     {
