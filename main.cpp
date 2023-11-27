@@ -2,8 +2,8 @@
 #include <thread>
 #include <chrono>
 #include <memory>
-#include "ThreadManager.h"
-#include "WorkerThread.h"
+#include "thread_manager/ThreadManager.h"
+#include "thread_manager/WorkerThread.h"
 #include "TestModule.h"
 #include "../utilities/Logger.h"
 #include "../utilities/Exception.h"
@@ -44,10 +44,12 @@ int main()
 
         threadManager.startAllThreads();
 
+
     }
     catch (const Exception &e)
     {
         std::cout << e.what() << std::endl;
+
     }
 
     while (true)

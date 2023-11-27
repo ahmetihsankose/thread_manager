@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(thread_manager
-    DESCRIPTION "Thread Manager POSIX"
+project(test
+    DESCRIPTION "ters for thread manager POSIX"
     LANGUAGES C CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -12,7 +12,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
 add_subdirectory(thread_manager)
-add_subdirectory(test)
+
+add_executable(${PROJECT_NAME})
+
+target_sources(${PROJECT_NAME}
+    PRIVATE
+        main.cpp)
+
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        thread_manager
+)
+
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+        thread_manager
+)
 
 
 

@@ -17,19 +17,6 @@ void StatsCollector::recordStats(int id, uint64_t value)
     writeStatsToFile(mFileName);
 }
 
-const uint64_t StatsCollector::getCurrentExecutionTime(int id) const
-{
-    auto it = mStats.find(id);
-    if (it != mStats.end() && it->second.size() > 0)
-    {
-        return it->second.back();
-    }
-    else
-    {
-        return 0;
-    }
-}
-
 void StatsCollector::printStats()
 {
     if (!enablePrinting)

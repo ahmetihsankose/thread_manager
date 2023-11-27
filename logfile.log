@@ -1,0 +1,18 @@
+[2023-11-27 18:37:02][INFO] Thread 0 period set to 1000000000 ns
+[2023-11-27 18:37:02][INFO] Thread 1 period set to 1000000000 ns
+[2023-11-27 18:37:02][INFO] Thread 2 period set to 1000000000 ns
+[2023-11-27 18:37:02][INFO] Thread 0 successfully started
+[2023-11-27 18:37:02][INFO] Thread 1 successfully started
+[2023-11-27 18:37:02][INFO] Thread 2 successfully started
+[2023-11-27 18:37:02][ERROR] Could not set thread 0 priority. Check limits.conf or execute as root!
+[2023-11-27 18:37:02][INFO] Thread 0 priority set to 45
+[2023-11-27 18:37:02][ERROR] Could not set thread 2 priority. Check limits.conf or execute as root!
+[2023-11-27 18:37:02][ERROR] Could not set thread 2 priority. Check limits.conf or execute as root!
+[2023-11-27 18:37:02][INFO] Thread 0 assigned to cpu core: 0
+[2023-11-27 18:37:02][ERROR] Could not set thread 2 priority. Check limits.conf or execute as root!
+[2023-11-27 18:37:02][INFO] Thread 0 assigned to cpu core: 0
+[2023-11-27 18:37:02][ERROR] Could not set thread 1 priority. Check limits.conf or execute as root!
+[2023-11-27 18:37:02][INFO] Thread 1 priority set to 45
+[2023-11-27 18:37:02][INFO] Thread 2 priority set to 45
+[2023-11-27 18:37:02][INFO] Thread 2 assigned to cpu core: 0
+[2023-11-27 18:37:02][INFO] Thread 1 assigned to cpu core: 0

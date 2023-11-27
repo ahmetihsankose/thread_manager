@@ -48,6 +48,7 @@ public:
     virtual void setRecordStats(bool recordStats) { return; }
 
     virtual const bool isRecordingStats() const { return false; }
+    virtual const uint64_t getCurrentExecutionTime() const { return 0; }
 
     virtual const int getThreadCycleTimeNs() const { return 0; }
 
