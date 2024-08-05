@@ -16,20 +16,18 @@ class ThreadBase
 {
 public:
     ThreadBase() : mThread(), mThreadStarted(false), mThreadID(0), mThreadName(""), mThreadPriority(0), mThreadCPUCore(-1) {}
-
     virtual ~ThreadBase()
     {
-        if (mThreadStarted)
-        {
-            pthread_detach(mThread);
-        }
+        destroy();
     }
 
     ThreadBase(const ThreadBase &) = delete;
     ThreadBase &operator=(const ThreadBase &) = delete;
 
+    void create();
     void start();
     void stop();
+    void destroy();
 
     bool isRunning() const { return mThreadStarted; }
     void setThreadID(int id) { mThreadID = id; }
@@ -37,20 +35,19 @@ public:
     void setPriority(int priority) { mThreadPriority = priority; }
     void setCpuCore(int cpuCore) { mThreadCPUCore = cpuCore; }
 
-    const int getThreadCpuCore() const { return mThreadCPUCore; }
-    const int getThreadPriority() const { return mThreadPriority; }
-    const int getThreadID() const { return mThreadID; }
-    const std::string getThreadName() const { return mThreadName; }
+    int getThreadCpuCore() const { return mThreadCPUCore; }
+    int getThreadPriority() const { return mThreadPriority; }
+    int getThreadID() const { return mThreadID; }
+    const std::string &getThreadName() const { return mThreadName; }
 
     virtual bool setThreadPriority(int priority) { return true; }
     virtual bool setThreadAffinity(int cpuCore) { return true; }
     virtual void setPeriod(unsigned int periodNs) {}
-    virtual void setRecordStats(bool recordStats) { return; }
+    virtual void setRecordStats(bool recordStats) {}
 
-    virtual const bool isRecordingStats() const { return false; }
-    virtual const uint64_t getCurrentExecutionTime() const { return 0; }
-
-    virtual const int getThreadCycleTimeNs() const { return 0; }
+    virtual bool isRecordingStats() const { return false; }
+    virtual uint64_t getCurrentExecutionTime() const { return 0; }
+    virtual int getThreadCycleTimeNs() const { return 0; }
 
     std::unique_ptr<StatsCollector> &getStatsCollector() { return statsCollector; }
 
@@ -62,7 +59,7 @@ protected:
 
 private:
     bool mThreadStarted = false;
-
+    bool mThreadCreated = false;
 protected:
     int mThreadID = 0;
     std::string mThreadName = "";

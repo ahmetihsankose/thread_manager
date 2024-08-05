@@ -20,12 +20,11 @@ public:
     void setRecordStats(bool recordStats) override
     {
         mRecordStats.store(recordStats);
-        statsCollector = recordStats ? std::make_unique<StatsCollector>() : move(statsCollector);
+        statsCollector = recordStats ? std::make_unique<StatsCollector>() : std::move(statsCollector);
     }
 
-    const bool isRecordingStats() const override { return mRecordStats.load(); }
-
-    const uint64_t getCurrentExecutionTime() const override { return executionTimeNs; }
+    bool isRecordingStats() const override { return mRecordStats.load(); }
+    uint64_t getCurrentExecutionTime() const override { return executionTimeNs; }
 
 protected:
     void run() override
@@ -36,10 +35,11 @@ protected:
         while (isRunning())
         {
             uint64_t startTimeNs = getCurrentTimeNs();
-            mWork(mObj); // call the work function
+            mWork(mObj);
             uint64_t endTimeNs = getCurrentTimeNs();
 
             executionTimeNs = endTimeNs - startTimeNs;
+
             if (mRecordStats.load())
             {
                 statsCollector->recordStats(mThreadID, executionTimeNs);
@@ -49,7 +49,7 @@ protected:
     }
 
 private:
-    uint64_t executionTimeNs{};
+    uint64_t executionTimeNs = 0;
     std::shared_ptr<void> mObj;
     std::function<void(std::shared_ptr<void>)> mWork;
     std::atomic<bool> mRecordStats;

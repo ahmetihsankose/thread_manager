@@ -20,14 +20,14 @@ public:
     {
         std::unique_lock<std::mutex> lock(mMutex);
 
-        auto  it = std::find_if(mThreads.begin(), mThreads.end(),
-                                [threadIndex](const std::unique_ptr<ThreadBase> &thread)
-                                {
-                                    return thread->getThreadID() == threadIndex;
-                                });
+        auto it = std::find_if(mThreads.begin(), mThreads.end(),
+                               [threadIndex](const std::unique_ptr<ThreadBase> &thread)
+                               {
+                                   return thread->getThreadID() == threadIndex;
+                               });
         if (it != mThreads.end())
         {
-            LOG_ERROR("Thread %d already exists", threadIndex);
+            LOG_DEBUG("Thread %d already exists", threadIndex);
             return;
         }
         
@@ -42,6 +42,8 @@ public:
 
     void startAllThreads();
     void stopAllThreads();
+    void destroyAllThreads();
+
     bool areAllThreadsRunning();
     bool areAllThreadsStopped();
 
@@ -53,9 +55,10 @@ public:
     void updateThreadPeriod(int threadID, int newPeriod);
 
     void setRecordStats(int threadID, bool recordStats);
-
     void printAllThreadStats(bool printToConsole = true);
     void writeAllThreadStatsToFile(const std::string &filename);
+
+    bool isThreadExist(int threadID);
 
     const std::vector<std::unique_ptr<ThreadBase>> &getThreads() const { return mThreads; }
 

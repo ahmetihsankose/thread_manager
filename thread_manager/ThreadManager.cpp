@@ -4,6 +4,7 @@
 */
 
 #include "ThreadManager.h"
+#include "../utilities/Logger.h"
 
 void ThreadManager::startAllThreads()
 {
@@ -23,43 +24,54 @@ void ThreadManager::stopAllThreads()
     }
 }
 
+void ThreadManager::destroyAllThreads()
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+    for (auto &thread : mThreads)
+    {
+        thread->destroy();
+    }
+    mThreads.clear();
+}
+
 bool ThreadManager::areAllThreadsRunning()
 {
     std::unique_lock<std::mutex> lock(mMutex);
-    for (const auto &thread : mThreads)
-    {
-        if (!thread->isRunning())
-        {
-            return false;
-        }
-    }
-    return true;
+    return std::all_of(mThreads.begin(), mThreads.end(),
+                       [](const std::unique_ptr<ThreadBase> &thread)
+                       {
+                           return thread->isRunning();
+                       });
 }
 
 bool ThreadManager::areAllThreadsStopped()
 {
     std::unique_lock<std::mutex> lock(mMutex);
-    for (const auto &thread : mThreads)
-    {
-        if (thread->isRunning())
-        {
-            return false;
-        }
-    }
-    return true;
+    return std::all_of(mThreads.begin(), mThreads.end(),
+                       [](const std::unique_ptr<ThreadBase> &thread)
+                       {
+                           return !thread->isRunning();
+                       });
 }
 
 void ThreadManager::destroyThread(int threadID)
 {
     std::unique_lock<std::mutex> lock(mMutex);
-    mThreads.erase(std::remove_if(mThreads.begin(), mThreads.end(),
-                                  [threadID](const std::unique_ptr<ThreadBase> &thread)
-                                  {
-                                      return thread->getThreadID() == threadID;
-                                  }),
-                   mThreads.end());
-
-    LOG_INFO("Thread %d successfully destroyed", threadID);
+    auto it = std::find_if(mThreads.begin(), mThreads.end(),
+                           [threadID](const std::unique_ptr<ThreadBase> &thread)
+                           {
+                               return thread->getThreadID() == threadID;
+                           });
+    if (it != mThreads.end())
+    {
+        (*it)->destroy();
+        mThreads.erase(it);
+        LOG_INFO("Thread %d successfully destroyed", threadID);
+    }
+    else
+    {
+        LOG_ERROR("Thread %d does not exist", threadID);
+    }
 }
 
 void ThreadManager::startThread(int threadID)
@@ -149,7 +161,6 @@ void ThreadManager::setRecordStats(int threadID, bool recordStats)
 void ThreadManager::printAllThreadStats(bool printToConsole)
 {
     std::unique_lock<std::mutex> lock(mMutex);
-
     for (const auto &thread : mThreads)
     {
         auto statsCollector = thread->getStatsCollector().get();
@@ -163,7 +174,6 @@ void ThreadManager::printAllThreadStats(bool printToConsole)
 void ThreadManager::writeAllThreadStatsToFile(const std::string &filename)
 {
     std::unique_lock<std::mutex> lock(mMutex);
-
     for (const auto &thread : mThreads)
     {
         auto statsCollector = thread->getStatsCollector().get();
@@ -172,4 +182,15 @@ void ThreadManager::writeAllThreadStatsToFile(const std::string &filename)
             statsCollector->setEnableWritingToFile(true, filename);
         }
     }
+}
+
+bool ThreadManager::isThreadExist(int threadID)
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+    auto it = std::find_if(mThreads.begin(), mThreads.end(),
+                           [threadID](const std::unique_ptr<ThreadBase> &thread)
+                           {
+                               return thread->getThreadID() == threadID;
+                           });
+    return it != mThreads.end();
 }

@@ -6,6 +6,9 @@
 #include "RealTimeThread.h"
 #include <time.h>
 #include <errno.h>
+#include <cstring>
+#include <signal.h>
+#include <stdexcept>
 
 void RealTimeThread::setPeriod(unsigned int periodNs)
 {
@@ -16,7 +19,6 @@ void RealTimeThread::setPeriod(unsigned int periodNs)
     }
 
     LOG_INFO("Thread %d period set to %d ns", getThreadID(), periodNs);
-
     mPeriodNs = periodNs;
 }
 
@@ -33,6 +35,11 @@ void RealTimeThread::waitForNextPeriod()
     {
         result = clock_nanosleep(CLOCK_MONOTONIC, 0, &ts, &ts);
     } while (result == EINTR);
+
+    if (result != 0)
+    {
+        LOG_ERROR("Thread %d failed to sleep for next period. Error: %d - %s", getThreadID(), result, strerror(result));
+    }
 }
 
 uint64_t RealTimeThread::getCurrentTimeNs()
@@ -44,49 +51,36 @@ uint64_t RealTimeThread::getCurrentTimeNs()
 
 bool RealTimeThread::setThreadPriority(int priority)
 {
-    bool success = true;
-    pthread_t thread = mThread;
-
     sched_param param;
     param.sched_priority = priority;
-    int errorFlag = pthread_setschedparam(thread, SCHED_FIFO, &param);
+    int errorFlag = pthread_setschedparam(mThread, SCHED_FIFO, &param);
     if (errorFlag != 0)
     {
-        LOG_ERROR("Could not set thread %d priority. Check limits.conf or execute as root!", getThreadID());
-        success = false;
+        LOG_ERROR("Could not set thread %d priority to %d. Error: %d - %s. Check limits.conf or execute as root!", getThreadID(), priority, errorFlag, strerror(errorFlag));
+        return false;
     }
-
     LOG_INFO("Thread %d priority set to %d", getThreadID(), priority);
-
-    return success;
+    return true;
 }
 
 bool RealTimeThread::setThreadAffinity(int cpuCore)
 {
-    bool success = true;
-    pthread_t thread = mThread;
-
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     int numberOfCPUs = sysconf(_SC_NPROCESSORS_ONLN);
 
-    if (cpuCore >= 0)
+    if (cpuCore >= 0 && cpuCore < numberOfCPUs)
     {
-        if (cpuCore >= numberOfCPUs)
-        {
-            LOG_ERROR("Tried to attach thread to core: %d even though we only have: %d core!", cpuCore, numberOfCPUs);
-            return false;
-        }
         CPU_SET(cpuCore, &cpuset);
-        int errorFlag = pthread_setaffinity_np(thread, sizeof(cpuset), &cpuset);
+        int errorFlag = pthread_setaffinity_np(mThread, sizeof(cpuset), &cpuset);
         if (errorFlag != 0)
         {
-            LOG_ERROR("Could not assign thread %d to single cpu core: %d", getThreadID(), errorFlag);
-            success = false;
+            LOG_ERROR("Could not assign thread %d to cpu core %d. Error: %d - %s", getThreadID(), cpuCore, errorFlag, strerror(errorFlag));
+            return false;
         }
+        LOG_INFO("Thread %d assigned to cpu core %d", getThreadID(), cpuCore);
+        return true;
     }
-
-    LOG_INFO("Thread %d assigned to cpu core: %d", getThreadID(), cpuCore);
-
-    return success;
+    LOG_ERROR("Invalid CPU core %d for thread %d. Available cores: %d", cpuCore, getThreadID(), numberOfCPUs);
+    return false;
 }

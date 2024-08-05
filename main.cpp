@@ -5,8 +5,8 @@
 #include "thread_manager/ThreadManager.h"
 #include "thread_manager/WorkerThread.h"
 #include "TestModule.h"
-#include "../utilities/Logger.h"
-#include "../utilities/Exception.h"
+#include "utilities/Logger.h"
+#include "utilities/Exception.h"
 #include <semaphore.h>
 
 sem_t sem1, sem2, sem3, sem4;
@@ -20,7 +20,7 @@ int main()
 {
     try
     {
-        LOG_FILE("/home/kose/workspace/my_projects/thread_manager/logfile.log");
+        // LOG_FILE("/home/kose/workspace/my_projects/thread_manager/logfile.log");
 
         sem_init(&sem1, 0, 0);
         sem_init(&sem2, 0, 0);
@@ -37,12 +37,15 @@ int main()
                                                  { std::static_pointer_cast<TestModule3>(obj)->tick(); });
 
 
-        threadManager.setRecordStats(0, true);
-        threadManager.setRecordStats(1, true);
-        threadManager.setRecordStats(2, true);
-        threadManager.writeAllThreadStatsToFile("/home/kose/workspace/my_projects/thread_manager/thread_test.log");
-
+        // threadManager.setRecordStats(0, true);
+        // threadManager.setRecordStats(1, true);
+        // threadManager.setRecordStats(2, true);
+        // threadManager.writeAllThreadStatsToFile("/home/kose/workspace/my_projects/thread_manager/thread_test.log");
         threadManager.startAllThreads();
+
+        threadManager.updateThreadPriority(0, 61);
+
+
 
 
     }
@@ -54,6 +57,8 @@ int main()
 
     while (true)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+        threadManager.updateThreadPriority(0, 32);
+
     }
 }
